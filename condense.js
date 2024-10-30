@@ -70,5 +70,3 @@ Ecwid.OnAPILoaded.add(function() {
         console.log('All event listeners attached');
     });
 });
-
-console.log('Script ended');
