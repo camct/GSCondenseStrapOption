@@ -49,7 +49,7 @@ Ecwid.OnAPILoaded.add(function() {
         });
 
         // Add change handler for radio buttons
-        const radioButtons = document.querySelectorAll('input[name="strap"]');
+        const radioButtons = document.querySelectorAll('input[name="Strap"]');
         console.log('Found radio buttons:', radioButtons.length);
         
         radioButtons.forEach(radio => {
