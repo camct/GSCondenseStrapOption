@@ -22,16 +22,22 @@
     box-shadow: 0 0 0 2px rgba(51, 133, 255, 0.2);
 }
 
-.strap-dropdown-arrow {
+.strap-dropdown-toggle span {
+    text-align: left;
+    flex-grow: 1;
+}
+
+.strap-dropdown-toggle .dropdown-arrow {
     transition: transform 0.2s ease;
     color: #8e8e8e;
 }
 
-.strap-dropdown-toggle.active .strap-dropdown-arrow {
+.strap-dropdown-toggle.active .dropdown-arrow {
     transform: rotate(180deg);
 }
 
 .product-details-module__content {
+    visibility: hidden;
     max-height: 0;
     overflow: hidden;
     opacity: 0;
@@ -39,6 +45,7 @@
 }
 
 .product-details-module__content.expanded {
+    visibility: visible;
     max-height: 500px;
     opacity: 1;
     padding: 10px 0;
