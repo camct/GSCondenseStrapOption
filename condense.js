@@ -80,7 +80,7 @@ Ecwid.OnAPILoaded.add(function() {
                         dropdownButton.querySelector('span').textContent = `${selectedText}${priceText}`;
                         
                         // Close dropdown
-                        optionContent.classList.remove('expanded');
+                        // optionContent.classList.remove('expanded');
                         optionContent.style.visibility = 'hidden';
                         dropdownButton.classList.remove('active');
                         
@@ -96,21 +96,19 @@ Ecwid.OnAPILoaded.add(function() {
         // Also setup listeners when dropdown is opened (in case of dynamic content)
         dropdownButton.addEventListener('click', () => {
             console.log('Dropdown button clicked');
-            const isExpanded = optionContent.classList.contains('expanded');
+            const isActive = dropdownButton.classList.contains('active');
             
-            if (!isExpanded) {
+            if (!isActive) {
                 // Setup radio listeners again when opening dropdown
                 setTimeout(setupRadioListeners, 100);
             }
             
             // Toggle visibility
-            if (isExpanded) {
-                optionContent.classList.remove('expanded');
+            if (isActive) {
                 optionContent.style.visibility = 'hidden';
                 dropdownButton.classList.remove('active');
             } else {
                 optionContent.style.visibility = 'visible';
-                optionContent.classList.add('expanded');
                 dropdownButton.classList.add('active');
             }
             

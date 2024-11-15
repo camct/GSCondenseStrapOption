@@ -43,10 +43,3 @@
     opacity: 0;
     transition: all 0.3s ease-in-out;
 }
-
-.details-product-option--Strap .product-details-module__content.expanded {
-    visibility: visible;
-    max-height: 500px;
-    opacity: 1;
-    padding: 10px 0;
-}
