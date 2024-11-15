@@ -1,6 +1,6 @@
 Ecwid.OnAPILoaded.add(function() {
     Ecwid.OnPageLoaded.add(function(page) {
-        if (page.type === 'product') {
+        if (page.type === 'PRODUCT') {
             console.log('Page loaded, current product ID:', page.productId);
             
             const productIds = [707439498, 707449474, 707449472, 707464855, 707464853];
