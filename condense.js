@@ -20,6 +20,10 @@ Ecwid.OnAPILoaded.add(function() {
             const optionContent = option.querySelector('.product-details-module__content');
             console.log('Found title and content:', { optionTitle, optionContent });
 
+            // Add dynamic CSS styles to optionContent
+            optionContent.style.visibility = 'hidden';
+            optionContent.style.transition = 'all 0.3s ease-in-out';
+
             // Find the currently selected radio button
             const defaultOption = optionContent.querySelector('input[type="radio"][name="Strap"]:checked') || 
                                 optionContent.querySelector('input[type="radio"][name="Strap"]');  // fallback to first option if none selected
@@ -30,9 +34,6 @@ Ecwid.OnAPILoaded.add(function() {
             } else {
                 console.log('Warning: No radio buttons found');
             }
-
-            // Initially hide the option content
-            optionContent.style.visibility = 'hidden';
 
             // Create dropdown button with selected value and price
             const defaultFormControl = defaultOption.closest('.form-control');
