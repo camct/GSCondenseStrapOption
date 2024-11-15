@@ -1,5 +1,7 @@
 Ecwid.OnAPILoaded.add(function() {
     Ecwid.OnPageLoaded.add(function(page) {
+        if (page.type === 'product') {
+
         console.log('Page loaded, current product ID:', page.productId);
         
         const productIds = [707439498, 707449474, 707449472, 707464855, 707464853];
@@ -116,5 +118,6 @@ Ecwid.OnAPILoaded.add(function() {
         });
 
         console.log('All event listeners attached');
+    }
     });
 });

@@ -36,7 +36,7 @@
     transform: rotate(180deg);
 }
 
-.product-details-module__content {
+.details-product-option--Strap .product-details-module__content {
     visibility: hidden;
     max-height: 0;
     overflow: hidden;
@@ -44,7 +44,7 @@
     transition: all 0.3s ease-in-out;
 }
 
-.product-details-module__content.expanded {
+.details-product-option--Strap .product-details-module__content.expanded {
     visibility: visible;
     max-height: 500px;
     opacity: 1;
