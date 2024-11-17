@@ -20,8 +20,15 @@ Ecwid.OnAPILoaded.add(function() {
             const optionContent = option.querySelector('.product-details-module__content');
             console.log('Found title and content:', { optionTitle, optionContent });
 
+            // Store the original maxHeight only if it's explicitly set
+            const hasOriginalMaxHeight = optionContent.style.maxHeight !== '';
+            const originalMaxHeight = hasOriginalMaxHeight ? optionContent.style.maxHeight : null;
+            console.log('Original maxHeight:', originalMaxHeight);
+
             // Add dynamic CSS styles to optionContent
             optionContent.style.visibility = 'hidden';
+            optionContent.style.maxHeight = '0';
+            optionContent.style.overflow = 'hidden';
             optionContent.style.transition = 'all 0.3s ease-in-out';
 
             // Find the currently selected radio button
@@ -50,6 +57,35 @@ Ecwid.OnAPILoaded.add(function() {
                 </svg>
             `;
             console.log('Dropdown button created');
+
+            // After creating the dropdown button but before inserting it
+            const basketColorOption = document.querySelector('.details-product-option--Basket-Color .product-details-module__content');
+            if (basketColorOption) {
+                // Get the computed styles
+                const basketStyles = window.getComputedStyle(basketColorOption);
+                
+                // Apply relevant styles only
+                dropdownButton.style.width = basketStyles.width;
+                dropdownButton.style.padding = basketStyles.padding;
+                dropdownButton.style.margin = basketStyles.margin;
+                dropdownButton.style.borderRadius = basketStyles.borderRadius;
+                dropdownButton.style.backgroundColor = basketStyles.backgroundColor;
+                dropdownButton.style.border = basketStyles.border;
+                dropdownButton.style.fontSize = basketStyles.fontSize;
+                dropdownButton.style.fontFamily = basketStyles.fontFamily;
+                
+                // Log for debugging
+                console.log('Applied basket styles:', {
+                    width: basketStyles.width,
+                    padding: basketStyles.padding,
+                    margin: basketStyles.margin,
+                    borderRadius: basketStyles.borderRadius,
+                    backgroundColor: basketStyles.backgroundColor,
+                    border: basketStyles.border,
+                    fontSize: basketStyles.fontSize,
+                    fontFamily: basketStyles.fontFamily
+                });
+            }
 
             // Insert after option-title
             optionTitle.parentNode.insertBefore(dropdownButton, optionTitle.nextSibling);
@@ -81,6 +117,7 @@ Ecwid.OnAPILoaded.add(function() {
                             
                             // Close dropdown
                             optionContent.style.visibility = 'hidden';
+                            optionContent.style.maxHeight = '0';
                             dropdownButton.classList.remove('active');
                             
                             console.log('Dropdown closed after selection');
@@ -98,16 +135,22 @@ Ecwid.OnAPILoaded.add(function() {
                 const isActive = dropdownButton.classList.contains('active');
                 
                 if (!isActive) {
-                    // Setup radio listeners again when opening dropdown
                     setTimeout(setupRadioListeners, 100);
                 }
                 
-                // Toggle visibility
+                // Toggle visibility and height
                 if (isActive) {
                     optionContent.style.visibility = 'hidden';
+                    optionContent.style.maxHeight = '0';
                     dropdownButton.classList.remove('active');
                 } else {
                     optionContent.style.visibility = 'visible';
+                    // Only set maxHeight if it originally existed
+                    if (hasOriginalMaxHeight) {
+                        optionContent.style.maxHeight = originalMaxHeight;
+                    } else {
+                        optionContent.style.removeProperty('maxHeight');  // Properly removes the style
+                    }
                     dropdownButton.classList.add('active');
                 }
                 

@@ -1,9 +1,11 @@
 .strap-dropdown-toggle {
     width: 100%;
+    min-width: 100%;
+    max-width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 10px 15px;
     background: #fbfbfb;
     border: 1px solid #99c2ff;
     border-radius: 4px;
@@ -25,11 +27,15 @@
 .strap-dropdown-toggle span {
     text-align: left;
     flex-grow: 1;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
 }
 
 .strap-dropdown-toggle .dropdown-arrow {
     transition: transform 0.2s ease;
     color: #8e8e8e;
+    flex-shrink: 0;
 }
 
 .strap-dropdown-toggle.active .dropdown-arrow {
