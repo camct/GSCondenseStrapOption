@@ -91,6 +91,13 @@ Ecwid.OnAPILoaded.add(function() {
                         dropdownButton.style.borderRadius = '4px';
                         dropdownButton.style.backgroundColor = '#fbfbfb';
                         
+                        // Add padding to span and SVG
+                        const buttonSpan = dropdownButton.querySelector('span');
+                        const buttonArrow = dropdownButton.querySelector('.dropdown-arrow');
+                        
+                        buttonSpan.style.padding = '15px 0 15px 15px';  // top right bottom left
+                        buttonArrow.style.padding = '15px 15px 15px 0';  // top right bottom left
+                        
                         console.log('Updated basket styles while preserving functionality');
                     }
                 }
