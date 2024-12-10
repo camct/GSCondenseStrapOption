@@ -146,20 +146,21 @@ Ecwid.OnAPILoaded.add(function() {
                             console.log('Radio button changed:', e.target.value);
                             if (e.target.checked) {
                                 const formControl = e.target.closest('.form-control');
-                                const label = formControl.querySelector('label span:first-child');  // Get first span (name)
+                                const label = formControl.querySelector('label span:first-child');
                                 const priceElement = formControl.querySelector('.option-surcharge__value');
                                 
-                                // Get the text and price (if it exists)
                                 const selectedText = label ? label.textContent : e.target.value;
                                 const priceText = priceElement ? 
-                                    ` (${priceElement.textContent})` : '';  // Include brackets in format
+                                    ` (${priceElement.textContent})` : '';
                                 
                                 // Update dropdown button text
                                 dropdownButton.querySelector('span').textContent = `${selectedText}${priceText}`;
                                 
-                                // Close dropdown
+                                // Close dropdown - match the properties from click handler
+                                console.log('Closing dropdown after selection');
                                 optionContent.style.visibility = 'hidden';
                                 optionContent.style.maxHeight = '0';
+                                optionContent.style.overflow = 'hidden';
                                 dropdownButton.classList.remove('active');
                                 
                                 console.log('Dropdown closed after selection');
