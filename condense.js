@@ -87,7 +87,7 @@ Ecwid.OnAPILoaded.add(function() {
                         dropdownButton.style.justifyContent = 'space-between';
                         dropdownButton.style.alignItems = 'center';
                         dropdownButton.style.cursor = 'pointer';
-                        dropdownButton.style.border = '1px solid #99c2ff';
+                        dropdownButton.style.border = '1px solid #66b2b2';  // Teal-blue color
                         dropdownButton.style.borderRadius = '4px';
                         dropdownButton.style.backgroundColor = '#fbfbfb';
                         
@@ -95,8 +95,20 @@ Ecwid.OnAPILoaded.add(function() {
                         const buttonSpan = dropdownButton.querySelector('span');
                         const buttonArrow = dropdownButton.querySelector('.dropdown-arrow');
                         
-                        buttonSpan.style.padding = '15px 0 15px 15px';  // top right bottom left
-                        buttonArrow.style.padding = '15px 15px 15px 0';  // top right bottom left
+                        // Ensure the span takes up available space but arrow remains visible
+                        buttonSpan.style.padding = '7px 0 7px 7px';  // top right bottom left
+                        buttonSpan.style.flexGrow = '1';  // Takes up available space
+                        
+                        // Keep arrow visible with padding
+                        buttonArrow.style.padding = '7px 7px 7px 0';  // top right bottom left
+                        buttonArrow.style.flexShrink = '0';  // Prevents arrow from shrinking
+                        buttonArrow.style.display = 'block';  // Ensures visibility
+                        
+                        // Update button styling with new colors
+                        dropdownButton.style.color = '#000000';  // Black text
+                        
+                        // Ensure the arrow color matches the text
+                        buttonArrow.style.color = '#000000';  // Match text color
                         
                         console.log('Updated basket styles while preserving functionality');
                     }
