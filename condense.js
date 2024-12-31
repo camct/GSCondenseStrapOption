@@ -1,5 +1,26 @@
 Ecwid.OnAPILoaded.add(function() {
+    const STRAP_PRICES = {'None': -3, 'Adjustable': 10, 'Fixed': 0, 'mtnStrap': 19.99};
+    let currentResizeObserver = null;
+    let currentDropdownButton = null;
+    let currentUpdateDropdownStyles = null;
+
+    // Cleanup function at top level
+    function cleanup() {
+        if (currentResizeObserver) {
+            currentResizeObserver.disconnect();
+        }
+
+        if (currentUpdateDropdownStyles) {
+            window.removeEventListener('resize', currentUpdateDropdownStyles);
+        }
+        
+        if (currentDropdownButton && currentDropdownButton.parentNode) {
+            currentDropdownButton.parentNode.removeChild(currentDropdownButton);
+        }
+    }
+
     Ecwid.OnPageLoaded.add(function(page) {
+        cleanup();
         if (page.type === 'PRODUCT') {
             console.log('Page loaded, current product ID:', page.productId);
             
@@ -67,6 +88,9 @@ Ecwid.OnAPILoaded.add(function() {
                         <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" fill="none"/>
                     </svg>
                 `;
+                // After creating the dropdownButton
+                console.log('Dropdown arrow element:', dropdownButton.querySelector('.dropdown-arrow'));
+                console.log('Dropdown arrow path:', dropdownButton.querySelector('.dropdown-arrow path'));
                 console.log('Dropdown button created with text:', defaultOption.labels[0].textContent);
 
                 // Inside your initializeDropdown function, after creating the dropdownButton
@@ -103,12 +127,22 @@ Ecwid.OnAPILoaded.add(function() {
                         buttonArrow.style.padding = '7px 7px 7px 0';  // top right bottom left
                         buttonArrow.style.flexShrink = '0';  // Prevents arrow from shrinking
                         buttonArrow.style.display = 'block';  // Ensures visibility
+                        buttonArrow.style.width = '12px';     // Explicit width
+                        buttonArrow.style.height = '8px';     // Explicit height
+                        buttonArrow.style.marginLeft = '8px'; // Space between text and arrow
                         
                         // Update button styling with new colors
-                        dropdownButton.style.color = '#000000';  // Black text
+                        dropdownButton.style.color = '#666666';  // Black text
                         
                         // Ensure the arrow color matches the text
-                        buttonArrow.style.color = '#000000';  // Match text color
+                        buttonArrow.style.color = '#666666';  // Match text color
+
+                        // Ensure the arrow color and stroke are visible
+                        const arrowPath = buttonArrow.querySelector('path');
+                        if (arrowPath) {
+                            arrowPath.setAttribute('stroke', '#666666');  // Black stroke
+                            arrowPath.setAttribute('stroke-width', '2');  // Thicker stroke
+                        }
                         
                         console.log('Updated basket styles while preserving functionality');
                     }
@@ -117,11 +151,16 @@ Ecwid.OnAPILoaded.add(function() {
                 // Initial style application
                 updateDropdownStyles();
 
+                currentUpdateDropdownStyles = updateDropdownStyles;
+
                 // Create a ResizeObserver to watch for size changes
                 const resizeObserver = new ResizeObserver(entries => {
                     console.log('Size changed, updating styles');
                     updateDropdownStyles();
                 });
+                
+                currentResizeObserver = resizeObserver;
+                currentDropdownButton = dropdownButton;
 
                 // Watch both the basket color option and its parent container
                 const basketColorOption = document.querySelector('.details-product-option--Basket-Color .product-details-module__content');
@@ -135,55 +174,47 @@ Ecwid.OnAPILoaded.add(function() {
                     requestAnimationFrame(updateDropdownStyles);
                 });
 
-                // Cleanup function
-                function cleanup() {
-                    resizeObserver.disconnect();
-                    window.removeEventListener('resize', updateDropdownStyles);
-                }
-
-                // Add cleanup when page changes
-                Ecwid.OnPageLoaded.add(function(page) {
-                    if (page.type !== 'PRODUCT') {
-                        cleanup();
-                    }
-                });
-
                 // Insert after option-title
                 optionTitle.parentNode.insertBefore(dropdownButton, optionTitle.nextSibling);
                 console.log('Dropdown button inserted into DOM');
 
-                // Modified radio button handling
                 function setupRadioListeners() {
                     const radioButtons = optionContent.querySelectorAll('input[type="radio"][name="Strap"]');
                     
                     radioButtons.forEach(radio => {
-                        // Remove any existing listeners first
+                        // Remove existing listeners
                         const newRadio = radio.cloneNode(true);
                         radio.parentNode.replaceChild(newRadio, radio);
                         
                         newRadio.addEventListener('change', (e) => {
-                            console.log('Radio button changed:', e.target.value);
-                            if (e.target.checked) {
-                                const formControl = e.target.closest('.form-control');
-                                const label = formControl.querySelector('label span:first-child');
-                                const priceElement = formControl.querySelector('.option-surcharge__value');
-                                
-                                const selectedText = label ? label.textContent : e.target.value;
-                                const priceText = priceElement ? 
-                                    ` (${priceElement.textContent})` : '';
-                                
-                                // Update dropdown button text
-                                dropdownButton.querySelector('span').textContent = `${selectedText}${priceText}`;
-                                
-                                // Close dropdown - match the properties from click handler
-                                console.log('Closing dropdown after selection');
-                                optionContent.style.visibility = 'hidden';
-                                optionContent.style.maxHeight = '0';
-                                optionContent.style.overflow = 'hidden';
-                                dropdownButton.classList.remove('active');
-                                
-                                console.log('Dropdown closed after selection');
-                            }
+                            console.log('Strap radio changed:', e.target.value);
+                            
+                            // Update dropdown UI
+                            const formControl = e.target.closest('.form-control');
+                            const label = formControl.querySelector('label span:first-child');
+                            const priceElement = formControl.querySelector('.option-surcharge__value');
+                            
+                            const selectedText = label ? label.textContent : e.target.value;
+                            const priceText = priceElement ? ` (${priceElement.textContent})` : '';
+                            
+                            // Update dropdown button text
+                            dropdownButton.querySelector('span').textContent = `${selectedText}${priceText}`;
+                            
+                            // Close dropdown
+                            optionContent.style.visibility = 'hidden';
+                            optionContent.style.maxHeight = '0';
+                            optionContent.style.overflow = 'hidden';
+                            dropdownButton.classList.remove('active');
+                            
+                            // Create and dispatch a custom event that cartAddEngraving.js will listen for
+                            const strapChangeEvent = new CustomEvent('strapOptionChanged', {
+                                detail: {
+                                    value: e.target.value,
+                                    price: STRAP_PRICES[e.target.value] || 0
+                                },
+                                bubbles: true
+                            });
+                            e.target.dispatchEvent(strapChangeEvent);
                         });
                     });
                 }
