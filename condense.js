@@ -206,14 +206,28 @@ Ecwid.OnAPILoaded.add(function() {
                             optionContent.style.overflow = 'hidden';
                             dropdownButton.classList.remove('active');
                             
-                            // Create and dispatch a custom event that cartAddEngraving.js will listen for
+                            // Normalize the strap value for price lookup
+                            const strapValue = e.target.value;
+    
+                            // If it's not one of the standard options, it must be mtnStrap
+                            const normalizedValue = ['Adjustable', 'Fixed', 'None'].includes(strapValue) 
+                                ? strapValue 
+                                : 'mtnStrap';
+                            
                             const strapChangeEvent = new CustomEvent('strapOptionChanged', {
                                 detail: {
-                                    value: e.target.value,
-                                    price: STRAP_PRICES[e.target.value] || 0
+                                    value: strapValue,  // Keep original value for display
+                                    price: STRAP_PRICES[normalizedValue] || 0  // Use normalized value for price
                                 },
                                 bubbles: true
                             });
+                            
+                            console.log('Dispatching strap change event:', {
+                                originalValue: strapValue,
+                                normalizedValue: normalizedValue,
+                                price: STRAP_PRICES[normalizedValue]
+                            });
+                            
                             e.target.dispatchEvent(strapChangeEvent);
                         });
                     });
