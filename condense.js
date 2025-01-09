@@ -100,49 +100,11 @@ Ecwid.OnAPILoaded.add(function() {
                         // Get the computed styles
                         const basketStyles = window.getComputedStyle(basketColorOption);
                         
-                        // Apply only layout styles, preserve button appearance
+                        // Only keep the dynamic width/height matching
                         dropdownButton.style.width = basketStyles.width;
                         dropdownButton.style.minHeight = basketStyles.minHeight;
                         dropdownButton.style.padding = basketStyles.padding;
                         dropdownButton.style.margin = basketStyles.margin;
-                        
-                        // Ensure button styling remains
-                        dropdownButton.style.display = 'flex';
-                        dropdownButton.style.justifyContent = 'space-between';
-                        dropdownButton.style.alignItems = 'center';
-                        dropdownButton.style.cursor = 'pointer';
-                        dropdownButton.style.border = '1px solid #66b2b2';  // Teal-blue color
-                        dropdownButton.style.borderRadius = '4px';
-                        dropdownButton.style.backgroundColor = '#fbfbfb';
-                        
-                        // Add padding to span and SVG
-                        const buttonSpan = dropdownButton.querySelector('span');
-                        const buttonArrow = dropdownButton.querySelector('.dropdown-arrow');
-                        
-                        // Ensure the span takes up available space but arrow remains visible
-                        buttonSpan.style.padding = '7px 0 7px 7px';  // top right bottom left
-                        buttonSpan.style.flexGrow = '1';  // Takes up available space
-                        
-                        // Keep arrow visible with padding
-                        buttonArrow.style.padding = '7px 7px 7px 0';  // top right bottom left
-                        buttonArrow.style.flexShrink = '0';  // Prevents arrow from shrinking
-                        buttonArrow.style.display = 'block';  // Ensures visibility
-                        buttonArrow.style.width = '12px';     // Explicit width
-                        buttonArrow.style.height = '8px';     // Explicit height
-                        buttonArrow.style.marginLeft = '8px'; // Space between text and arrow
-                        
-                        // Update button styling with new colors
-                        dropdownButton.style.color = '#666666';  // Black text
-                        
-                        // Ensure the arrow color matches the text
-                        buttonArrow.style.color = '#666666';  // Match text color
-
-                        // Ensure the arrow color and stroke are visible
-                        const arrowPath = buttonArrow.querySelector('path');
-                        if (arrowPath) {
-                            arrowPath.setAttribute('stroke', '#666666');  // Black stroke
-                            arrowPath.setAttribute('stroke-width', '2');  // Thicker stroke
-                        }
                         
                         console.log('Updated basket styles while preserving functionality');
                     }
