@@ -102,7 +102,11 @@ Ecwid.OnAPILoaded.add(function() {
 
                 svg.appendChild(path);
                 dropdownButton.appendChild(textSpan);
-                dropdownButton.appendChild(svg);
+
+                // Before appending the SVG
+                if (!dropdownButton.querySelector('.dropdown-arrow')) {
+                    dropdownButton.appendChild(svg);
+                }
 
                 // Add debugging right after creating the button
                 console.log('Button HTML:', dropdownButton.innerHTML);
@@ -178,7 +182,7 @@ Ecwid.OnAPILoaded.add(function() {
                     const radioButtons = optionContent.querySelectorAll('input[type="radio"][name="Strap"]');
                     
                     radioButtons.forEach(radio => {
-                        // Remove existing listeners
+                        // Remove existing listeners and clone the radio button
                         const newRadio = radio.cloneNode(true);
                         radio.parentNode.replaceChild(newRadio, radio);
                         
@@ -190,11 +194,14 @@ Ecwid.OnAPILoaded.add(function() {
                             const label = formControl.querySelector('label span:first-child');
                             const priceElement = formControl.querySelector('.option-surcharge__value');
                             
+                            // Clear any existing text content first
+                            const textSpan = dropdownButton.querySelector('span');
+                            textSpan.textContent = ''; // Clear existing content
+                            
+                            // Set new content
                             const selectedText = label ? label.textContent : e.target.value;
                             const priceText = priceElement ? ` (${priceElement.textContent})` : '';
-                            
-                            // Update dropdown button text
-                            dropdownButton.querySelector('span').textContent = `${selectedText}${priceText}`;
+                            textSpan.textContent = `${selectedText}${priceText}`;
                             
                             // Close dropdown
                             optionContent.style.visibility = 'hidden';
