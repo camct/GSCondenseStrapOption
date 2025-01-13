@@ -82,12 +82,48 @@ Ecwid.OnAPILoaded.add(function() {
                 
                 const dropdownButton = document.createElement('button');
                 dropdownButton.className = 'strap-dropdown-toggle';
-                dropdownButton.innerHTML = `
-                    <span>${defaultOption.labels[0].textContent}${priceText}</span>
-                    <svg class="dropdown-arrow" width="12" height="8" viewBox="0 0 12 8">
-                        <path d="M1 1L6 6L11 1" stroke="currentColor" stroke-width="2" fill="none"/>
-                    </svg>
-                `;
+
+                // Create span for text
+                const textSpan = document.createElement('span');
+                textSpan.textContent = `${defaultOption.labels[0].textContent}${priceText}`;
+
+                // Create SVG element programmatically
+                const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                svg.setAttribute("class", "dropdown-arrow");
+                svg.setAttribute("width", "12");
+                svg.setAttribute("height", "8");
+                svg.setAttribute("viewBox", "0 0 12 8");
+
+                const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                path.setAttribute("d", "M1 1L6 6L11 1");
+                path.setAttribute("stroke", "currentColor");
+                path.setAttribute("stroke-width", "2");
+                path.setAttribute("fill", "none");
+
+                svg.appendChild(path);
+                dropdownButton.appendChild(textSpan);
+                dropdownButton.appendChild(svg);
+
+                // Add debugging right after creating the button
+                console.log('Button HTML:', dropdownButton.innerHTML);
+                console.log('SVG element:', dropdownButton.querySelector('svg'));
+                console.log('SVG computed styles:', window.getComputedStyle(dropdownButton.querySelector('svg')));
+
+                // Add a small delay to check if SVG is rendered
+                setTimeout(() => {
+                    const arrow = dropdownButton.querySelector('.dropdown-arrow');
+                    if (arrow) {
+                        console.log('Arrow after delay:', {
+                            width: arrow.offsetWidth,
+                            height: arrow.offsetHeight,
+                            display: window.getComputedStyle(arrow).display,
+                            visibility: window.getComputedStyle(arrow).visibility
+                        });
+                    } else {
+                        console.log('Arrow not found after delay');
+                    }
+                }, 100);
+
                 // After creating the dropdownButton
                 console.log('Dropdown arrow element:', dropdownButton.querySelector('.dropdown-arrow'));
                 console.log('Dropdown arrow path:', dropdownButton.querySelector('.dropdown-arrow path'));
@@ -97,13 +133,11 @@ Ecwid.OnAPILoaded.add(function() {
                 function updateDropdownStyles() {
                     const basketColorOption = document.querySelector('.details-product-option--Basket-Color .product-details-module__content');
                     if (basketColorOption) {
-                        // Get the computed styles
                         const basketStyles = window.getComputedStyle(basketColorOption);
                         
-                        // Only keep the dynamic width/height matching
+                        // Only keep width/height matching
                         dropdownButton.style.width = basketStyles.width;
                         dropdownButton.style.minHeight = basketStyles.minHeight;
-                        dropdownButton.style.padding = basketStyles.padding;
                         dropdownButton.style.margin = basketStyles.margin;
                         
                         console.log('Updated basket styles while preserving functionality');
