@@ -25,7 +25,7 @@
     margin-right: 10px;
     display: flex;
     align-items: center;
-    padding: 7px 0 7px 7px;
+    padding: 0;
 }
 
 .strap-dropdown-toggle .dropdown-arrow {
@@ -35,7 +35,7 @@
     width: 12px !important;
     height: 8px !important;
     display: block !important;
-    padding: 7px 7px 7px 0;
+    padding: 0;
     margin-left: 8px;
     position: absolute;
     right: 15px;
