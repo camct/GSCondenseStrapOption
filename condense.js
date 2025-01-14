@@ -93,6 +93,7 @@ Ecwid.OnAPILoaded.add(function() {
                 svg.setAttribute("width", "12");
                 svg.setAttribute("height", "8");
                 svg.setAttribute("viewBox", "0 0 12 8");
+                svg.style.display = "block"; // Force display block immediately
 
                 const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
                 path.setAttribute("d", "M1 1L6 6L11 1");
@@ -103,10 +104,14 @@ Ecwid.OnAPILoaded.add(function() {
                 svg.appendChild(path);
                 dropdownButton.appendChild(textSpan);
 
-                // Before appending the SVG
-                if (!dropdownButton.querySelector('.dropdown-arrow')) {
-                    dropdownButton.appendChild(svg);
-                }
+                // Ensure SVG is added and visible
+                dropdownButton.appendChild(svg);
+
+                // Force a repaint
+                requestAnimationFrame(() => {
+                    svg.style.display = "block";
+                    svg.style.visibility = "visible";
+                });
 
                 // Add debugging right after creating the button
                 console.log('Button HTML:', dropdownButton.innerHTML);
@@ -138,13 +143,23 @@ Ecwid.OnAPILoaded.add(function() {
                     const basketColorOption = document.querySelector('.details-product-option--Basket-Color .product-details-module__content');
                     if (basketColorOption) {
                         const basketStyles = window.getComputedStyle(basketColorOption);
+                        const padding = document.querySelector('.ec-size .ec-store .form-control__select').style.padding;
                         
-                        // Only keep width/height matching
+                        // Add console.log to see what styles are being applied
+                        console.log('Basket styles:', {
+                            width: basketStyles.width,
+                            minHeight: basketStyles.minHeight,
+                            margin: basketStyles.margin,
+                            padding: basketStyles.padding
+                        });
+                        
+                        // Only copy specific styles, DO NOT copy padding
                         dropdownButton.style.width = basketStyles.width;
                         dropdownButton.style.minHeight = basketStyles.minHeight;
                         dropdownButton.style.margin = basketStyles.margin;
+                        dropdownButton.style.padding = padding ? padding : '4px 5px 4px 5px';
                         
-                        console.log('Updated basket styles while preserving functionality');
+                        console.log('Button computed styles after update:', window.getComputedStyle(dropdownButton).padding);
                     }
                 }
 
@@ -191,16 +206,14 @@ Ecwid.OnAPILoaded.add(function() {
                             
                             // Update dropdown UI
                             const formControl = e.target.closest('.form-control');
-                            const label = formControl.querySelector('label span:first-child');
                             const priceElement = formControl.querySelector('.option-surcharge__value');
                             
-                            // Clear any existing text content first
-                            const textSpan = dropdownButton.querySelector('span');
-                            textSpan.textContent = ''; // Clear existing content
-                            
-                            // Set new content
-                            const selectedText = label ? label.textContent : e.target.value;
+                            // Use the radio button's value directly
+                            const selectedText = e.target.value;
                             const priceText = priceElement ? ` (${priceElement.textContent})` : '';
+                            
+                            // Update the text span
+                            const textSpan = dropdownButton.querySelector('span');
                             textSpan.textContent = `${selectedText}${priceText}`;
                             
                             // Close dropdown
