@@ -8,15 +8,32 @@ Ecwid.OnAPILoaded.add(function() {
     function cleanup() {
         if (currentResizeObserver) {
             currentResizeObserver.disconnect();
+            currentResizeObserver = null;
         }
 
         if (currentUpdateDropdownStyles) {
             window.removeEventListener('resize', currentUpdateDropdownStyles);
+            currentUpdateDropdownStyles = null;
         }
         
-        if (currentDropdownButton && currentDropdownButton.parentNode) {
-            currentDropdownButton.parentNode.removeChild(currentDropdownButton);
-        }
+        // Remove all existing dropdown buttons
+        const existingDropdowns = document.querySelectorAll('.strap-dropdown-toggle');
+        existingDropdowns.forEach(dropdown => {
+            if (dropdown.parentNode) {
+                dropdown.parentNode.removeChild(dropdown);
+            }
+        });
+        
+        // Reset the current button reference
+        currentDropdownButton = null;
+
+        // Reset any visible option content
+        const visibleOptions = document.querySelectorAll('.details-product-option--Strap .product-details-module__content');
+        visibleOptions.forEach(option => {
+            option.style.visibility = 'hidden';
+            option.style.maxHeight = '0';
+            option.style.overflow = 'hidden';
+        });
     }
 
     Ecwid.OnPageLoaded.add(function(page) {
@@ -143,7 +160,7 @@ Ecwid.OnAPILoaded.add(function() {
                     const basketColorOption = document.querySelector('.details-product-option--Basket-Color .product-details-module__content');
                     if (basketColorOption) {
                         const basketStyles = window.getComputedStyle(basketColorOption);
-                        const padding = document.querySelector('.ec-size .ec-store .form-control__select').style.padding;
+                        // const padding = document.querySelector('.ec-size .ec-store .form-control__select').style.padding;
                         
                         // Add console.log to see what styles are being applied
                         console.log('Basket styles:', {
@@ -157,7 +174,7 @@ Ecwid.OnAPILoaded.add(function() {
                         dropdownButton.style.width = basketStyles.width;
                         dropdownButton.style.minHeight = basketStyles.minHeight;
                         dropdownButton.style.margin = basketStyles.margin;
-                        dropdownButton.style.padding = padding ? padding : '4px 5px 4px 5px';
+                        // dropdownButton.style.padding = padding ? padding : '4px 5px 4px 5px';
                         
                         console.log('Button computed styles after update:', window.getComputedStyle(dropdownButton).padding);
                     }

@@ -13,7 +13,7 @@
     margin-bottom: 10px;
     color: #666666;
     position: relative;
-    padding: 4px 5px 4px 5px;
+    padding: 7px 7px 7px 7px;
 }
 
 .strap-dropdown-toggle:hover {
@@ -23,7 +23,6 @@
 .strap-dropdown-toggle span {
     text-align: left;
     flex-grow: 1;
-    margin-right: 10px;
     display: flex;
     align-items: center;
 }
@@ -35,11 +34,10 @@
     width: 12px !important;
     height: 8px !important;
     display: block !important;
-    margin-left: 8px;
     position: absolute;
-    /* right: 15px; */
-    /* top: 50%; */
-    /* transform: translateY(-50%); */
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .strap-dropdown-toggle .dropdown-arrow path {
@@ -49,8 +47,4 @@
 
 .strap-dropdown-toggle.active .dropdown-arrow {
     transform: rotate(180deg);
-}
-
-.strap-dropdown-toggle svg {
-    display: block !important;
 }
