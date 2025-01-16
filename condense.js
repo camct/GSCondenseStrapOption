@@ -26,14 +26,6 @@ Ecwid.OnAPILoaded.add(function() {
         
         // Reset the current button reference
         currentDropdownButton = null;
-
-        // Reset any visible option content
-        const visibleOptions = document.querySelectorAll('.details-product-option--Strap .product-details-module__content');
-        visibleOptions.forEach(option => {
-            option.style.visibility = 'hidden';
-            option.style.maxHeight = '0';
-            option.style.overflow = 'hidden';
-        });
     }
 
     Ecwid.OnPageLoaded.add(function(page) {
