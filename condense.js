@@ -52,6 +52,11 @@ Ecwid.OnAPILoaded.add(function() {
 
             // Function to initialize the dropdown
             function initializeDropdown() {
+                if (document.querySelector('.strap-dropdown-toggle')) {
+                    console.log('Dropdown already exists, exiting');
+                    return;
+                }
+                
                 const option = document.querySelector('.details-product-option--Strap');
                 if (!option) {
                     console.log('Strap option not found, retrying...');
