@@ -1,50 +1,56 @@
-.strap-dropdown-toggle {
-    width: 100%;
-    min-width: 100%;
-    max-width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    /* padding: 10px 15px; */
-    background: #fbfbfb;
-    border: 1px solid #66b2b2;
-    border-radius: 4px;
+/* Main dropdown styles with proper specificity */
+.ec-size .ec-store .details-product-option .strap-dropdown-toggle {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    background: #fbfbfb !important;
+    border: 1px solid #66b2b2 !important;
+    border-radius: 4px !important;
+    margin-bottom: 10px !important;
+    padding: 7px 7px 7px 7px !important;
+    position: relative !important;
+    color: #666666;
     cursor: pointer;
-    margin-bottom: 10px;
-    color: #666666;
-    position: relative;
-    padding: 7px 7px 7px 7px;
 }
 
-.strap-dropdown-toggle:hover {
-    background: white;
+.ec-size .ec-store .details-product-option .strap-dropdown-toggle:hover {
+    background: white !important;
 }
 
-.strap-dropdown-toggle span {
-    text-align: left;
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
+.ec-size .ec-store .details-product-option .strap-dropdown-toggle span {
+    text-align: left !important;
+    flex-grow: 1 !important;
+    display: flex !important;
+    align-items: center !important;
 }
 
-.strap-dropdown-toggle .dropdown-arrow {
-    transition: transform 0.2s ease;
-    color: #666666;
-    flex-shrink: 0;
+.ec-size .ec-store .details-product-option .strap-dropdown-toggle .dropdown-arrow {
+    position: absolute !important;
+    right: 15px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
     width: 12px !important;
     height: 8px !important;
     display: block !important;
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
 }
 
+/* Arrow rotation for active state */
+.strap-dropdown-toggle.active .dropdown-arrow {
+    transform: rotate(180deg) translateY(50%) !important;
+}
+
+/* Arrow path styles */
 .strap-dropdown-toggle .dropdown-arrow path {
     stroke: currentColor;
     stroke-width: 2;
 }
 
-.strap-dropdown-toggle.active .dropdown-arrow {
-    transform: rotate(180deg);
-}
+/* Remove or comment out these less specific duplicates:
+.strap-dropdown-toggle { ... }
+.strap-dropdown-toggle:hover { ... }
+.strap-dropdown-toggle span { ... }
+.strap-dropdown-toggle .dropdown-arrow { ... }
+*/
