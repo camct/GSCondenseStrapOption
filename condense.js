@@ -95,25 +95,29 @@ Ecwid.OnAPILoaded.add(function() {
                     ` (${defaultPriceElement.textContent})` : '';  // Include brackets in format
                 
                 const dropdownButton = document.createElement('button');
-                dropdownButton.className = 'strap-dropdown-toggle';
+                dropdownButton.className = 'strap-dropdown-toggle form-control form-control--flexible form-control--select';
 
                 // Create span for text
                 const textSpan = document.createElement('span');
+                textSpan.className = 'form-control__text';  // Add Ecwid's class
                 textSpan.textContent = `${defaultOption.labels[0].textContent}${priceText}`;
 
-                // Create SVG element programmatically
+                // Update the SVG
                 const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-                svg.setAttribute("class", "dropdown-arrow");
+                svg.setAttribute("class", "form-control__arrow");
                 svg.setAttribute("width", "12");
-                svg.setAttribute("height", "8");
-                svg.setAttribute("viewBox", "0 0 12 8");
-                svg.style.display = "block"; // Force display block immediately
+                svg.setAttribute("height", "12");
+                svg.setAttribute("viewBox", "0 0 12 12");
+                svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
 
                 const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-                path.setAttribute("d", "M1 1L6 6L11 1");
-                path.setAttribute("stroke", "currentColor");
-                path.setAttribute("stroke-width", "2");
+                path.setAttribute("d", "M11 4L6 9 1 4");
                 path.setAttribute("fill", "none");
+                path.setAttribute("fill-rule", "evenodd");
+                path.setAttribute("stroke", "currentColor");
+                path.setAttribute("stroke-width", "1");
+                path.setAttribute("stroke-linecap", "round");
+                path.setAttribute("stroke-linejoin", "round");
 
                 svg.appendChild(path);
                 dropdownButton.appendChild(textSpan);
@@ -134,7 +138,7 @@ Ecwid.OnAPILoaded.add(function() {
 
                 // Add a small delay to check if SVG is rendered
                 setTimeout(() => {
-                    const arrow = dropdownButton.querySelector('.dropdown-arrow');
+                    const arrow = dropdownButton.querySelector('.form-control__arrow');
                     if (arrow) {
                         console.log('Arrow after delay:', {
                             width: arrow.offsetWidth,
@@ -148,8 +152,8 @@ Ecwid.OnAPILoaded.add(function() {
                 }, 100);
 
                 // After creating the dropdownButton
-                console.log('Dropdown arrow element:', dropdownButton.querySelector('.dropdown-arrow'));
-                console.log('Dropdown arrow path:', dropdownButton.querySelector('.dropdown-arrow path'));
+                console.log('Dropdown arrow element:', dropdownButton.querySelector('.form-control__arrow'));
+                console.log('Dropdown arrow path:', dropdownButton.querySelector('.form-control__arrow path'));
                 console.log('Dropdown button created with text:', defaultOption.labels[0].textContent);
 
                 // Inside your initializeDropdown function, after creating the dropdownButton
