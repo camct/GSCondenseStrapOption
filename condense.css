@@ -1,4 +1,4 @@
-/* Main dropdown styles with proper specificity */
+Main dropdown styles with proper specificity */
 .ec-size .ec-store .details-product-option .strap-dropdown-toggle {
     width: 100% !important;
     min-width: 100% !important;
@@ -27,7 +27,7 @@
     align-items: center !important;
 }
 
-.ec-size .ec-store .details-product-option .strap-dropdown-toggle .dropdown-arrow {
+.ec-size .ec-store .details-product-option .strap-dropdown-toggle .strap-dropdown-arrow {
     position: absolute !important;
     right: 15px !important;
     top: 50% !important;
@@ -38,19 +38,12 @@
 }
 
 /* Arrow rotation for active state */
-.strap-dropdown-toggle.active .dropdown-arrow {
+.strap-dropdown-toggle.active .strap-dropdown-arrow {
     transform: rotate(180deg) translateY(50%) !important;
 }
 
 /* Arrow path styles */
-.strap-dropdown-toggle .dropdown-arrow path {
+.strap-dropdown-toggle .strap-dropdown-arrow path {
     stroke: currentColor;
     stroke-width: 2;
 }
-
-/* Remove or comment out these less specific duplicates:
-.strap-dropdown-toggle { ... }
-.strap-dropdown-toggle:hover { ... }
-.strap-dropdown-toggle span { ... }
-.strap-dropdown-toggle .dropdown-arrow { ... }
-*/

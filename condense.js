@@ -35,7 +35,7 @@ Ecwid.OnAPILoaded.add(function() {
             
             const productIds = [707439498, 707449474, 707449472, 707464855, 707464853];
             
-            // Check if the current product ID is in the allowed list
+            // Check if the current product ID is  in the allowed list
             if (!productIds.includes(page.productId)) {
                 console.log('Product ID not in allowed list, exiting');
                 return;
@@ -95,16 +95,16 @@ Ecwid.OnAPILoaded.add(function() {
                     ` (${defaultPriceElement.textContent})` : '';  // Include brackets in format
                 
                 const dropdownButton = document.createElement('button');
-                dropdownButton.className = 'strap-dropdown-toggle form-control form-control--flexible form-control--select';
+                dropdownButton.className = 'strap-dropdown-toggle';
 
                 // Create span for text
                 const textSpan = document.createElement('span');
-                textSpan.className = 'form-control__text';  // Add Ecwid's class
+                textSpan.className = 'strap-dropdown-text';
                 textSpan.textContent = `${defaultOption.labels[0].textContent}${priceText}`;
 
                 // Update the SVG
                 const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-                svg.setAttribute("class", "form-control__arrow");
+                svg.setAttribute("class", "strap-dropdown-arrow");
                 svg.setAttribute("width", "12");
                 svg.setAttribute("height", "12");
                 svg.setAttribute("viewBox", "0 0 12 12");
@@ -138,7 +138,7 @@ Ecwid.OnAPILoaded.add(function() {
 
                 // Add a small delay to check if SVG is rendered
                 setTimeout(() => {
-                    const arrow = dropdownButton.querySelector('.form-control__arrow');
+                    const arrow = dropdownButton.querySelector('.strap-dropdown-arrow');
                     if (arrow) {
                         console.log('Arrow after delay:', {
                             width: arrow.offsetWidth,
@@ -152,8 +152,8 @@ Ecwid.OnAPILoaded.add(function() {
                 }, 100);
 
                 // After creating the dropdownButton
-                console.log('Dropdown arrow element:', dropdownButton.querySelector('.form-control__arrow'));
-                console.log('Dropdown arrow path:', dropdownButton.querySelector('.form-control__arrow path'));
+                console.log('Dropdown arrow element:', dropdownButton.querySelector('.strap-dropdown-arrow'));
+                console.log('Dropdown arrow path:', dropdownButton.querySelector('.strap-dropdown-arrow path'));
                 console.log('Dropdown button created with text:', defaultOption.labels[0].textContent);
 
                 // Inside your initializeDropdown function, after creating the dropdownButton
@@ -161,23 +161,12 @@ Ecwid.OnAPILoaded.add(function() {
                     const basketColorOption = document.querySelector('.details-product-option--Basket-Color .product-details-module__content');
                     if (basketColorOption) {
                         const basketStyles = window.getComputedStyle(basketColorOption);
-                        // const padding = document.querySelector('.ec-size .ec-store .form-control__select').style.padding;
                         
-                        // Add console.log to see what styles are being applied
-                        console.log('Basket styles:', {
-                            width: basketStyles.width,
-                            minHeight: basketStyles.minHeight,
-                            margin: basketStyles.margin,
-                            padding: basketStyles.padding
-                        });
-                        
-                        // Only copy specific styles, DO NOT copy padding
+                        // Only copy width and margin
                         dropdownButton.style.width = basketStyles.width;
-                        dropdownButton.style.minHeight = basketStyles.minHeight;
                         dropdownButton.style.margin = basketStyles.margin;
-                        // dropdownButton.style.padding = padding ? padding : '4px 5px 4px 5px';
                         
-                        console.log('Button computed styles after update:', window.getComputedStyle(dropdownButton).padding);
+                        console.log('Button computed styles after update:', window.getComputedStyle(dropdownButton));
                     }
                 }
 
@@ -274,11 +263,6 @@ Ecwid.OnAPILoaded.add(function() {
                 dropdownButton.addEventListener('click', () => {
                     console.log('Button clicked');
                     const isActive = dropdownButton.classList.contains('active');
-                    console.log('Current state:', {
-                        isActive,
-                        visibility: optionContent.style.visibility,
-                        maxHeight: optionContent.style.maxHeight
-                    });
                     
                     if (!isActive) {
                         setTimeout(setupRadioListeners, 100);
