@@ -1,5 +1,5 @@
-Main dropdown styles with proper specificity */
-.ec-size .ec-store .details-product-option .strap-dropdown-toggle {
+/* Main dropdown styles with proper specificity */
+.ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle {
     width: 100% !important;
     min-width: 100% !important;
     max-width: 100% !important;
@@ -16,18 +16,21 @@ Main dropdown styles with proper specificity */
     cursor: pointer !important;
 }
 
-.ec-size .ec-store .details-product-option .strap-dropdown-toggle:hover {
+/* Update hover state selector */
+.ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle:hover {
     background: white !important;
 }
 
-.ec-size .ec-store .details-product-option .strap-dropdown-toggle span {
+/* Update span selector */
+.ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle span {
     text-align: left !important;
     flex-grow: 1 !important;
     display: flex !important;
     align-items: center !important;
 }
 
-.ec-size .ec-store .details-product-option .strap-dropdown-toggle .strap-dropdown-arrow {
+/* Update arrow selector */
+.ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-arrow {
     position: absolute !important;
     right: 15px !important;
     top: 50% !important;
@@ -37,13 +40,13 @@ Main dropdown styles with proper specificity */
     display: block !important;
 }
 
-/* Arrow rotation for active state */
-.strap-dropdown-toggle.active .strap-dropdown-arrow {
+/* Update arrow rotation selector */
+.ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle.active .strap-dropdown-arrow {
     transform: rotate(180deg) translateY(50%) !important;
 }
 
-/* Arrow path styles */
-.strap-dropdown-toggle .strap-dropdown-arrow path {
-    stroke: currentColor;
-    stroke-width: 2;
+/* Update arrow path selector */
+.ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-arrow path {
+    stroke: currentColor !important;
+    stroke-width: 2 !important;
 }
