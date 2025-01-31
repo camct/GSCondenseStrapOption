@@ -29,24 +29,37 @@
     align-items: center !important;
 }
 
-/* Update arrow selector */
+/* Default arrow size */
 .ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-arrow {
     position: absolute !important;
-    right: 15px !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    width: 12px !important;
-    height: 8px !important;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    align-items: center;
+    /* transform: translateY(-50%) !important; */
+    color: #6e6e6e;
+    display: flex !important;
+    transform: translateY(-50%) rotate(180deg) !important;
+}
+
+.ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-arrow svg {
     display: block !important;
 }
 
-/* Update arrow rotation selector */
-.ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle.active .strap-dropdown-arrow {
-    transform: rotate(180deg) translateY(50%) !important;
+/* Small size */
+.ec-size.ec-size--s .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-arrow {
+    width: 20px !important;
 }
 
-/* Update arrow path selector */
-.ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-arrow path {
-    stroke: currentColor !important;
-    stroke-width: 2 !important;
+.ec-size.ec-size--s .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-arrow svg {
+    width: 16px !important;
+}
+
+/* Large size */
+.ec-size.ec-size--l .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-arrow {
+    width: 25px !important;
+}
+
+.ec-size.ec-size--l .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-arrow svg {
+    width: 20px !important;
 }
