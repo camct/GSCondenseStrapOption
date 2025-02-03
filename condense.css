@@ -32,14 +32,13 @@
 /* Default arrow size */
 .ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-arrow {
     position: absolute !important;
-    right: 0;
+    right: 8px !important;
     top: 0;
     bottom: 0;
     align-items: center;
     /* transform: translateY(-50%) !important; */
     color: #6e6e6e;
     display: flex !important;
-    transform: translateY(-50%) rotate(180deg) !important;
 }
 
 .ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-arrow svg {
