@@ -33,10 +33,10 @@
 .ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-arrow {
     position: absolute !important;
     /* right: 8px !important; */
-    height: 100%;
-    align-items: center;
+    height: 100% !important;
+    align-items: center !important;
     /* transform: translateY(-50%) !important; */
-    color: #6e6e6e;
+    color: #6e6e6e !important;
     display: flex !important;
 }
 
