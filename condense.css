@@ -31,17 +31,13 @@
 
 /* Default arrow size */
 .ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-arrow {
-    position: absolute !important;
-    /* right: 8px !important; */
-    height: 100% !important;
-    align-items: center !important;
-    /* transform: translateY(-50%) !important; */
     color: #6e6e6e !important;
-    display: flex !important;
+    width: 20px !important;
+    margin-left: auto !important;
 }
 
 .ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-arrow svg {
-    display: block !important;
+    justify-content: flex-start !important;
 }
 
 /* Small size */
@@ -49,15 +45,15 @@
     width: 20px !important;
 }
 
-.ec-size.ec-size--s .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-arrow svg {
+/* .ec-size.ec-size--s .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-arrow svg {
     width: 16px !important;
-}
+} */
 
 /* Large size */
 .ec-size.ec-size--l .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-arrow {
     width: 25px !important;
 }
 
-.ec-size.ec-size--l .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-arrow svg {
+/* .ec-size.ec-size--l .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-arrow svg {
     width: 20px !important;
-}
+} */
