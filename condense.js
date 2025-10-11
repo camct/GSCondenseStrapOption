@@ -72,9 +72,9 @@ Ecwid.OnAPILoaded.add(function() {
                 console.log('Original maxHeight:', originalMaxHeight);
 
                 // Add dynamic CSS styles to optionContent
-                optionContent.style.visibility = 'hidden';
-                optionContent.style.maxHeight = '0';
-                optionContent.style.overflow = 'hidden';
+                optionContent.style.visibility = 'visible';
+                optionContent.style.maxHeight = 'none';
+                optionContent.style.overflow = 'visible';
                 optionContent.style.transition = 'all 0.3s ease-in-out';
 
                 // Find the currently selected radio button
@@ -198,6 +198,10 @@ Ecwid.OnAPILoaded.add(function() {
 
                 // Insert after option-title
                 optionTitle.parentNode.insertBefore(dropdownButton, optionTitle.nextSibling);
+                
+                // Set the dropdown as active since it starts expanded
+                dropdownButton.classList.add('active');
+                
                 console.log('Dropdown button inserted into DOM');
 
                 function setupRadioListeners() {
