@@ -3,6 +3,7 @@ Ecwid.OnAPILoaded.add(function() {
     let currentResizeObserver = null;
     let currentDropdownButton = null;
     let currentUpdateDropdownStyles = null;
+    let strapImages = {}; // Store strap images from JSON
 
     // Cleanup function at top level
     function cleanup() {
@@ -42,12 +43,26 @@ Ecwid.OnAPILoaded.add(function() {
             }
             console.log('Product ID found in allowed list');
 
+            // Function to load strap images from JSON
+            async function loadStrapImages() {
+                try {
+                    const response = await fetch('StrapImages.json');
+                    strapImages = await response.json();
+                    console.log('Strap images loaded:', strapImages);
+                } catch (error) {
+                    console.error('Error loading StrapImages.json:', error);
+                }
+            }
+
             // Function to initialize the dropdown
-            function initializeDropdown() {
+            async function initializeDropdown() {
                 if (document.querySelector('.strap-dropdown-toggle')) {
                     console.log('Dropdown already exists, exiting');
                     return;
                 }
+                
+                // Load strap images first
+                await loadStrapImages();
                 
                 const option = document.querySelector('.details-product-option--Strap');
                 if (!option) {
@@ -92,15 +107,37 @@ Ecwid.OnAPILoaded.add(function() {
                 const defaultFormControl = defaultOption.closest('.form-control');
                 const defaultPriceElement = defaultFormControl.querySelector('.option-surcharge__value');
                 const priceText = defaultPriceElement ? 
-                    ` (${defaultPriceElement.textContent})` : '';  // Include brackets in format
+                    defaultPriceElement.textContent : '';  // Price text without brackets
                 
                 const dropdownButton = document.createElement('button');
                 dropdownButton.className = 'strap-dropdown-toggle';
 
-                // Create span for text
-                const textSpan = document.createElement('span');
-                textSpan.className = 'strap-dropdown-text';
-                textSpan.textContent = `${defaultOption.labels[0].textContent}${priceText}`;
+                // Create span for content (image and price)
+                const contentSpan = document.createElement('span');
+                contentSpan.className = 'strap-dropdown-text';
+                
+                const strapValue = defaultOption.value;
+                
+                // Create image element if image exists
+                if (strapImages[strapValue]) {
+                    const strapImage = document.createElement('img');
+                    strapImage.className = 'strap-dropdown-image';
+                    strapImage.src = strapImages[strapValue];
+                    strapImage.alt = strapValue;
+                    contentSpan.appendChild(strapImage);
+                } else {
+                    // Fallback to text if image not found
+                    const textNode = document.createTextNode(strapValue);
+                    contentSpan.appendChild(textNode);
+                }
+                
+                // Create price span
+                if (priceText) {
+                    const priceSpan = document.createElement('span');
+                    priceSpan.className = 'strap-dropdown-price';
+                    priceSpan.textContent = priceText;
+                    contentSpan.appendChild(priceSpan);
+                }
 
                 // Update the SVG
                 const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -120,7 +157,7 @@ Ecwid.OnAPILoaded.add(function() {
                 path.setAttribute("stroke-linejoin", "round");
 
                 svg.appendChild(path);
-                dropdownButton.appendChild(textSpan);
+                dropdownButton.appendChild(contentSpan);
 
                 // Ensure SVG is added and visible
                 dropdownButton.appendChild(svg);
@@ -154,7 +191,7 @@ Ecwid.OnAPILoaded.add(function() {
                 // After creating the dropdownButton
                 console.log('Dropdown arrow element:', dropdownButton.querySelector('.strap-dropdown-arrow'));
                 console.log('Dropdown arrow path:', dropdownButton.querySelector('.strap-dropdown-arrow path'));
-                console.log('Dropdown button created with text:', defaultOption.labels[0].textContent);
+                console.log('Dropdown button created with strap:', strapValue);
 
                 // Inside your initializeDropdown function, after creating the dropdownButton
                 function updateDropdownStyles() {
@@ -201,6 +238,8 @@ Ecwid.OnAPILoaded.add(function() {
                 
                 // Set the dropdown as active since it starts expanded
                 dropdownButton.classList.add('active');
+                // Hide the dropdown button while radios are visible
+                dropdownButton.style.display = 'none';
                 
                 console.log('Dropdown button inserted into DOM');
 
@@ -220,18 +259,69 @@ Ecwid.OnAPILoaded.add(function() {
                             const priceElement = formControl.querySelector('.option-surcharge__value');
                             
                             // Use the radio button's value directly
-                            const selectedText = e.target.value;
-                            const priceText = priceElement ? ` (${priceElement.textContent})` : '';
+                            const selectedValue = e.target.value;
+                            const priceText = priceElement ? priceElement.textContent : '';
                             
-                            // Update the text span
-                            const textSpan = dropdownButton.querySelector('span');
-                            textSpan.textContent = `${selectedText}${priceText}`;
+                            // Update the content span (image and price)
+                            const contentSpan = dropdownButton.querySelector('.strap-dropdown-text');
+                            const existingImage = contentSpan.querySelector('.strap-dropdown-image');
+                            const existingPrice = contentSpan.querySelector('.strap-dropdown-price');
+                            
+                            // Remove any direct text nodes (not in child elements)
+                            Array.from(contentSpan.childNodes).forEach(node => {
+                                if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
+                                    node.remove();
+                                }
+                            });
+                            
+                            // Update or create image
+                            if (strapImages[selectedValue]) {
+                                if (existingImage) {
+                                    existingImage.src = strapImages[selectedValue];
+                                    existingImage.alt = selectedValue;
+                                    existingImage.style.display = '';
+                                } else {
+                                    const strapImage = document.createElement('img');
+                                    strapImage.className = 'strap-dropdown-image';
+                                    strapImage.src = strapImages[selectedValue];
+                                    strapImage.alt = selectedValue;
+                                    contentSpan.insertBefore(strapImage, existingPrice || null);
+                                }
+                            } else {
+                                // Show text if no image
+                                if (existingImage) {
+                                    existingImage.style.display = 'none';
+                                }
+                                // Add text node before price if it exists, otherwise just append
+                                const textNode = document.createTextNode(selectedValue);
+                                if (existingPrice) {
+                                    contentSpan.insertBefore(textNode, existingPrice);
+                                } else {
+                                    contentSpan.appendChild(textNode);
+                                }
+                            }
+                            
+                            // Update or create price
+                            if (priceText) {
+                                if (existingPrice) {
+                                    existingPrice.textContent = priceText;
+                                } else {
+                                    const priceSpan = document.createElement('span');
+                                    priceSpan.className = 'strap-dropdown-price';
+                                    priceSpan.textContent = priceText;
+                                    contentSpan.appendChild(priceSpan);
+                                }
+                            } else if (existingPrice) {
+                                existingPrice.remove();
+                            }
                             
                             // Close dropdown
                             optionContent.style.visibility = 'hidden';
                             optionContent.style.maxHeight = '0';
                             optionContent.style.overflow = 'hidden';
                             dropdownButton.classList.remove('active');
+                            // Show the dropdown button again after selection
+                            dropdownButton.style.display = '';
                             
                             // Normalize the strap value for price lookup
                             const strapValue = e.target.value;
@@ -279,12 +369,16 @@ Ecwid.OnAPILoaded.add(function() {
                         optionContent.style.maxHeight = '0';
                         optionContent.style.overflow = 'hidden';
                         dropdownButton.classList.remove('active');
+                        // Show the dropdown button when radios are hidden
+                        dropdownButton.style.display = '';
                     } else {
                         console.log('Opening dropdown');
                         optionContent.style.visibility = 'visible';
                         optionContent.style.maxHeight = 'none';
                         optionContent.style.overflow = 'visible';
                         dropdownButton.classList.add('active');
+                        // Hide the dropdown button when radios are visible
+                        dropdownButton.style.display = 'none';
                     }
                     
                     console.log('Dropdown state after toggle:', {

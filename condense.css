@@ -27,6 +27,22 @@
     flex-grow: 1 !important;
     display: flex !important;
     align-items: center !important;
+    gap: 10px !important;
+}
+
+/* Strap image styling */
+.ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-image {
+    max-height: 40px !important;
+    max-width: 150px !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+}
+
+/* Strap price styling */
+.ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-price {
+    margin-left: auto !important;
+    color: rgba(110, 110, 110, 0.8) !important;
 }
 
 /* Default arrow size */
