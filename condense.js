@@ -45,6 +45,32 @@ Ecwid.OnAPILoaded.add(function() {
         });
     }
     
+    // Helper function to find strap image URL by value (handles exact match, trimmed, and case-insensitive)
+    function getStrapImageUrl(value) {
+        if (!value) return null;
+        
+        // Try exact match first
+        if (STRAP_IMAGES[value]) {
+            return STRAP_IMAGES[value];
+        }
+        
+        // Try trimmed match
+        const trimmed = value.trim();
+        if (STRAP_IMAGES[trimmed]) {
+            return STRAP_IMAGES[trimmed];
+        }
+        
+        // Try case-insensitive match
+        const normalizedValue = trimmed.toLowerCase();
+        for (const [key, url] of Object.entries(STRAP_IMAGES)) {
+            if (key.toLowerCase() === normalizedValue) {
+                return url;
+            }
+        }
+        
+        return null;
+    }
+    
     // Start preloading images immediately
     preloadStrapImages();
 
@@ -133,8 +159,8 @@ Ecwid.OnAPILoaded.add(function() {
                 }
 
                 // Create dropdown button with selected value and price
-                const defaultFormControl = defaultOption.closest('.form-control');
-                const defaultPriceElement = defaultFormControl.querySelector('.option-surcharge__value');
+                const defaultFormControl = defaultOption ? defaultOption.closest('.form-control') : null;
+                const defaultPriceElement = defaultFormControl ? defaultFormControl.querySelector('.option-surcharge__value') : null;
                 const priceText = defaultPriceElement ? 
                     defaultPriceElement.textContent : '';  // Price text without brackets
                 
@@ -145,18 +171,28 @@ Ecwid.OnAPILoaded.add(function() {
                 const contentSpan = document.createElement('span');
                 contentSpan.className = 'strap-dropdown-text';
                 
-                const strapValue = defaultOption.value;
+                const strapValue = defaultOption ? defaultOption.value : '';
+                
+                // Debug: Log the strap value and whether it exists in STRAP_IMAGES
+                console.log('Looking up strap image for value:', strapValue);
+                console.log('Available keys in STRAP_IMAGES:', Object.keys(STRAP_IMAGES));
+                
+                // Use helper function to get image URL
+                const imageUrl = getStrapImageUrl(strapValue);
+                console.log('Image URL found?', imageUrl);
                 
                 // Create image element if image exists
-                if (STRAP_IMAGES[strapValue]) {
+                if (imageUrl) {
                     const strapImage = document.createElement('img');
                     strapImage.className = 'strap-dropdown-image';
-                    strapImage.src = STRAP_IMAGES[strapValue];
+                    strapImage.src = imageUrl;
                     strapImage.alt = strapValue;
                     contentSpan.appendChild(strapImage);
+                    console.log('Image created and added for:', strapValue);
                 } else {
                     // Fallback to text if image not found
-                    const textNode = document.createTextNode(strapValue);
+                    console.log('Image not found for value:', strapValue, '- falling back to text');
+                    const textNode = document.createTextNode(strapValue || 'No selection');
                     contentSpan.appendChild(textNode);
                 }
                 
@@ -265,10 +301,10 @@ Ecwid.OnAPILoaded.add(function() {
                 // Insert after option-title
                 optionTitle.parentNode.insertBefore(dropdownButton, optionTitle.nextSibling);
                 
-                // Set the dropdown as active since it starts expanded
+                // Set the dropdown as active since it starts expanded (radios visible, button hidden)
                 dropdownButton.classList.add('active');
-                // Hide the dropdown button while radios are visible
-                dropdownButton.style.display = 'none';
+                // Hide button when optionContent is visible (inline style as backup)
+                dropdownButton.style.setProperty('display', 'none', 'important');
                 
                 console.log('Dropdown button inserted into DOM');
 
@@ -304,20 +340,29 @@ Ecwid.OnAPILoaded.add(function() {
                             });
                             
                             // Update or create image
-                            if (STRAP_IMAGES[selectedValue]) {
+                            console.log('Updating dropdown for selected value:', selectedValue);
+                            
+                            // Use helper function to get image URL
+                            const imageUrl = getStrapImageUrl(selectedValue);
+                            console.log('Image URL found?', imageUrl);
+                            
+                            if (imageUrl) {
                                 if (existingImage) {
-                                    existingImage.src = STRAP_IMAGES[selectedValue];
+                                    existingImage.src = imageUrl;
                                     existingImage.alt = selectedValue;
                                     existingImage.style.display = '';
+                                    console.log('Updated existing image with:', imageUrl);
                                 } else {
                                     const strapImage = document.createElement('img');
                                     strapImage.className = 'strap-dropdown-image';
-                                    strapImage.src = STRAP_IMAGES[selectedValue];
+                                    strapImage.src = imageUrl;
                                     strapImage.alt = selectedValue;
                                     contentSpan.insertBefore(strapImage, existingPrice || null);
+                                    console.log('Created new image with:', imageUrl);
                                 }
                             } else {
                                 // Show text if no image
+                                console.log('No image found for:', selectedValue, '- showing text instead');
                                 if (existingImage) {
                                     existingImage.style.display = 'none';
                                 }
@@ -349,8 +394,8 @@ Ecwid.OnAPILoaded.add(function() {
                             optionContent.style.maxHeight = '0';
                             optionContent.style.overflow = 'hidden';
                             dropdownButton.classList.remove('active');
-                            // Show the dropdown button again after selection
-                            dropdownButton.style.display = '';
+                            // Show button when optionContent is hidden (inline style as backup)
+                            dropdownButton.style.setProperty('display', 'flex', 'important');
                             
                             // Normalize the strap value for price lookup
                             const strapValue = e.target.value;
@@ -398,16 +443,16 @@ Ecwid.OnAPILoaded.add(function() {
                         optionContent.style.maxHeight = '0';
                         optionContent.style.overflow = 'hidden';
                         dropdownButton.classList.remove('active');
-                        // Show the dropdown button when radios are hidden
-                        dropdownButton.style.display = '';
+                        // Show button when optionContent is hidden
+                        dropdownButton.style.setProperty('display', 'flex', 'important');
                     } else {
                         console.log('Opening dropdown');
                         optionContent.style.visibility = 'visible';
                         optionContent.style.maxHeight = 'none';
                         optionContent.style.overflow = 'visible';
                         dropdownButton.classList.add('active');
-                        // Hide the dropdown button when radios are visible
-                        dropdownButton.style.display = 'none';
+                        // Hide button when optionContent is visible
+                        dropdownButton.style.setProperty('display', 'none', 'important');
                     }
                     
                     console.log('Dropdown state after toggle:', {

@@ -3,7 +3,7 @@
     width: 100% !important;
     min-width: 100% !important;
     max-width: 100% !important;
-    display: flex !important;
+    /* Display is controlled by JavaScript, not set here */
     justify-content: space-between !important;
     align-items: center !important;
     background: #fbfbfb !important;
@@ -14,6 +14,16 @@
     position: relative !important;
     color: rgba(28, 28, 28, 0.9) !important;
     cursor: pointer !important;
+}
+
+/* Show the button when not active (radios hidden) */
+.ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle:not(.active) {
+    display: flex !important;
+}
+
+/* Hide the button when active (radios visible) */
+.ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle.active {
+    display: none !important;
 }
 
 /* Update hover state selector */
