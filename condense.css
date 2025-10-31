@@ -32,11 +32,24 @@
 
 /* Strap image styling */
 .ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-image {
-    max-height: 40px !important;
-    max-width: 150px !important;
+    max-height: 18px !important;
+    max-width: 180px !important;
     width: auto !important;
     height: auto !important;
     object-fit: contain !important;
+    padding: 2px !important;
+}
+
+/* Small size image */
+.ec-size.ec-size--s .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-image {
+    max-height: 16px !important;
+    max-width: 100px !important;
+}
+
+/* Large size image */
+.ec-size.ec-size--l .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-image {
+    max-height: 20px !important;
+    max-width: 140px !important;
 }
 
 /* Strap price styling */
