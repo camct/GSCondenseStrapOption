@@ -1,9 +1,52 @@
 Ecwid.OnAPILoaded.add(function() {
     const STRAP_PRICES = {'None': -3, 'Adjustable': 10, 'Fixed': 0, 'mtnStrap': 19.99};
+    // Strap images data embedded in the script
+    const STRAP_IMAGES = {
+        "Salida Magic": "https://v2uploads.zopim.io/3/e/F/3eFaiNrwYkfEtd5mb7bCEBxsvUWHUH4R/11473b8440ac88cdd06789823e08511768ecac35.png",
+        "Wasatch Front": "https://v2uploads.zopim.io/3/e/F/3eFaiNrwYkfEtd5mb7bCEBxsvUWHUH4R/aaaf04823849ce69bb21158001fe2bc909ed60ad.png",
+        "Autumn": "https://v2uploads.zopim.io/3/e/F/3eFaiNrwYkfEtd5mb7bCEBxsvUWHUH4R/f2ad194c3b2b26091a5cce7ba258d4e2779b1dc7.png",
+        "Bridgers": "https://v2uploads.zopim.io/3/e/F/3eFaiNrwYkfEtd5mb7bCEBxsvUWHUH4R/f5903867c8640bb53b5aab87e5468e9099087ac3.png",
+        "Mount Tam": "https://v2uploads.zopim.io/3/e/F/3eFaiNrwYkfEtd5mb7bCEBxsvUWHUH4R/cfb0b1dcd7fa27eeeb9531cafc773f39fd53e8b2.png",
+        "Flow": "https://v2uploads.zopim.io/3/e/F/3eFaiNrwYkfEtd5mb7bCEBxsvUWHUH4R/3586dac16e7ae760735b39966514b7ac4142c629.png",
+        "Idaho 9": "https://v2uploads.zopim.io/3/e/F/3eFaiNrwYkfEtd5mb7bCEBxsvUWHUH4R/fac842e98aa70987445710d32d903a83d4e491e5.png",
+        "Dark Side": "https://v2uploads.zopim.io/3/e/F/3eFaiNrwYkfEtd5mb7bCEBxsvUWHUH4R/e5f95d4c13928f6dad040e4473e1e5ee94394c0e.png",
+        "Lone Peak": "https://v2uploads.zopim.io/3/e/F/3eFaiNrwYkfEtd5mb7bCEBxsvUWHUH4R/8f612d42e4877ec6535aadaf327636628411afcd.png",
+        "Teton": "https://v2uploads.zopim.io/3/e/F/3eFaiNrwYkfEtd5mb7bCEBxsvUWHUH4R/50b9b3081acc108626749805f63893d7228b26ad.png",
+        "The Grand": "https://v2uploads.zopim.io/3/e/F/3eFaiNrwYkfEtd5mb7bCEBxsvUWHUH4R/5b0ae3f0d2be85eb8f907c1205b0aedaef5d6084.png",
+        "Spanish Peaks": "https://v2uploads.zopim.io/3/e/F/3eFaiNrwYkfEtd5mb7bCEBxsvUWHUH4R/fc10b4558a9db9928e6dc9e5a079ea4ec230d8af.png",
+        "Mary Jane": "https://v2uploads.zopim.io/3/e/F/3eFaiNrwYkfEtd5mb7bCEBxsvUWHUH4R/1cc7def11bdedfbe45185ee299995a6e36719d43.png",
+        "Purple-Haze": "https://v2uploads.zopim.io/3/e/F/3eFaiNrwYkfEtd5mb7bCEBxsvUWHUH4R/6cb063dc3114e43e8d267cda4134d1b26ce97787.png",
+        "Just Point It - Zia": "https://v2uploads.zopim.io/3/e/F/3eFaiNrwYkfEtd5mb7bCEBxsvUWHUH4R/2fcd0c0d39c6bfd9b4389befe417ae9dbc8228a1.png",
+        "Lone 2": "https://i.ibb.co/0yM4vrm/Lone-2.png",
+        "Sacagawea": "https://i.ibb.co/RYML6RB/Sacagawea.png",
+        "Fixed": "https://i.ibb.co/ZHQ6bmV/fixed.jpg",
+        "Adjustable": "https://i.ibb.co/3Rp9vLm/adjustable.jpg",
+        "Fantasia": "https://i.ibb.co/LhC46k9R/fantasia-Strap-Edites.png"
+    };
+    
     let currentResizeObserver = null;
     let currentDropdownButton = null;
     let currentUpdateDropdownStyles = null;
-    let strapImages = {}; // Store strap images from JSON
+    
+    // Preload all strap images when script loads
+    function preloadStrapImages() {
+        const imagePromises = [];
+        for (const [key, url] of Object.entries(STRAP_IMAGES)) {
+            const img = new Image();
+            const promise = new Promise((resolve, reject) => {
+                img.onload = resolve;
+                img.onerror = resolve; // Resolve even on error to not block other images
+            });
+            img.src = url;
+            imagePromises.push(promise);
+        }
+        Promise.all(imagePromises).then(() => {
+            console.log('All strap images preloaded');
+        });
+    }
+    
+    // Start preloading images immediately
+    preloadStrapImages();
 
     // Cleanup function at top level
     function cleanup() {
@@ -43,26 +86,12 @@ Ecwid.OnAPILoaded.add(function() {
             }
             console.log('Product ID found in allowed list');
 
-            // Function to load strap images from JSON
-            async function loadStrapImages() {
-                try {
-                    const response = await fetch('StrapImages.json');
-                    strapImages = await response.json();
-                    console.log('Strap images loaded:', strapImages);
-                } catch (error) {
-                    console.error('Error loading StrapImages.json:', error);
-                }
-            }
-
             // Function to initialize the dropdown
-            async function initializeDropdown() {
+            function initializeDropdown() {
                 if (document.querySelector('.strap-dropdown-toggle')) {
                     console.log('Dropdown already exists, exiting');
                     return;
                 }
-                
-                // Load strap images first
-                await loadStrapImages();
                 
                 const option = document.querySelector('.details-product-option--Strap');
                 if (!option) {
@@ -119,10 +148,10 @@ Ecwid.OnAPILoaded.add(function() {
                 const strapValue = defaultOption.value;
                 
                 // Create image element if image exists
-                if (strapImages[strapValue]) {
+                if (STRAP_IMAGES[strapValue]) {
                     const strapImage = document.createElement('img');
                     strapImage.className = 'strap-dropdown-image';
-                    strapImage.src = strapImages[strapValue];
+                    strapImage.src = STRAP_IMAGES[strapValue];
                     strapImage.alt = strapValue;
                     contentSpan.appendChild(strapImage);
                 } else {
@@ -275,15 +304,15 @@ Ecwid.OnAPILoaded.add(function() {
                             });
                             
                             // Update or create image
-                            if (strapImages[selectedValue]) {
+                            if (STRAP_IMAGES[selectedValue]) {
                                 if (existingImage) {
-                                    existingImage.src = strapImages[selectedValue];
+                                    existingImage.src = STRAP_IMAGES[selectedValue];
                                     existingImage.alt = selectedValue;
                                     existingImage.style.display = '';
                                 } else {
                                     const strapImage = document.createElement('img');
                                     strapImage.className = 'strap-dropdown-image';
-                                    strapImage.src = strapImages[selectedValue];
+                                    strapImage.src = STRAP_IMAGES[selectedValue];
                                     strapImage.alt = selectedValue;
                                     contentSpan.insertBefore(strapImage, existingPrice || null);
                                 }
