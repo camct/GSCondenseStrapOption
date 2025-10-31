@@ -200,7 +200,8 @@ Ecwid.OnAPILoaded.add(function() {
                 if (priceText) {
                     const priceSpan = document.createElement('span');
                     priceSpan.className = 'strap-dropdown-price';
-                    priceSpan.textContent = priceText;
+                    // Wrap price in parentheses
+                    priceSpan.textContent = `(${priceText})`;
                     contentSpan.appendChild(priceSpan);
                 }
 
@@ -301,12 +302,19 @@ Ecwid.OnAPILoaded.add(function() {
                 // Insert after option-title
                 optionTitle.parentNode.insertBefore(dropdownButton, optionTitle.nextSibling);
                 
+                // Initial state: optionContent visible, dropdownButton hidden
                 // Set the dropdown as active since it starts expanded (radios visible, button hidden)
                 dropdownButton.classList.add('active');
                 // Hide button when optionContent is visible (inline style as backup)
                 dropdownButton.style.setProperty('display', 'none', 'important');
                 
                 console.log('Dropdown button inserted into DOM');
+                console.log('Initial state:', {
+                    buttonDisplay: window.getComputedStyle(dropdownButton).display,
+                    buttonHasActive: dropdownButton.classList.contains('active'),
+                    optionContentVisibility: optionContent.style.visibility,
+                    optionContentMaxHeight: optionContent.style.maxHeight
+                });
 
                 function setupRadioListeners() {
                     const radioButtons = optionContent.querySelectorAll('input[type="radio"][name="Strap"]');
@@ -378,11 +386,13 @@ Ecwid.OnAPILoaded.add(function() {
                             // Update or create price
                             if (priceText) {
                                 if (existingPrice) {
-                                    existingPrice.textContent = priceText;
+                                    // Wrap price in parentheses
+                                    existingPrice.textContent = `(${priceText})`;
                                 } else {
                                     const priceSpan = document.createElement('span');
                                     priceSpan.className = 'strap-dropdown-price';
-                                    priceSpan.textContent = priceText;
+                                    // Wrap price in parentheses
+                                    priceSpan.textContent = `(${priceText})`;
                                     contentSpan.appendChild(priceSpan);
                                 }
                             } else if (existingPrice) {
@@ -438,7 +448,9 @@ Ecwid.OnAPILoaded.add(function() {
                     
                     // Toggle visibility and height
                     if (isActive) {
-                        console.log('Closing dropdown');
+                        // Currently open (optionContent visible, button hidden)
+                        // Closing: hide optionContent, show button
+                        console.log('Closing dropdown - hiding radio buttons, showing button');
                         optionContent.style.visibility = 'hidden';
                         optionContent.style.maxHeight = '0';
                         optionContent.style.overflow = 'hidden';
@@ -446,7 +458,9 @@ Ecwid.OnAPILoaded.add(function() {
                         // Show button when optionContent is hidden
                         dropdownButton.style.setProperty('display', 'flex', 'important');
                     } else {
-                        console.log('Opening dropdown');
+                        // Currently closed (optionContent hidden, button visible)
+                        // Opening: show optionContent, hide button
+                        console.log('Opening dropdown - showing radio buttons, hiding button');
                         optionContent.style.visibility = 'visible';
                         optionContent.style.maxHeight = 'none';
                         optionContent.style.overflow = 'visible';
@@ -455,11 +469,18 @@ Ecwid.OnAPILoaded.add(function() {
                         dropdownButton.style.setProperty('display', 'none', 'important');
                     }
                     
-                    console.log('Dropdown state after toggle:', {
-                        visibility: optionContent.style.visibility,
-                        maxHeight: optionContent.style.maxHeight,
-                        overflow: optionContent.style.overflow
-                    });
+                    // Use setTimeout to check computed styles after browser has updated
+                    setTimeout(() => {
+                        console.log('Dropdown state after toggle:', {
+                            optionContentVisibility: optionContent.style.visibility,
+                            optionContentMaxHeight: optionContent.style.maxHeight,
+                            optionContentOverflow: optionContent.style.overflow,
+                            buttonDisplay: window.getComputedStyle(dropdownButton).display,
+                            buttonHasActiveClass: dropdownButton.classList.contains('active'),
+                            optionContentComputedDisplay: window.getComputedStyle(optionContent).display,
+                            optionContentComputedVisibility: window.getComputedStyle(optionContent).visibility
+                        });
+                    }, 50);
                 });
 
                 console.log('All event listeners attached');

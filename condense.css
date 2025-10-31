@@ -3,7 +3,8 @@
     width: 100% !important;
     min-width: 100% !important;
     max-width: 100% !important;
-    /* Display is controlled by JavaScript, not set here */
+    /* Display is controlled by JavaScript inline styles with !important */
+    display: flex; /* Default, but JavaScript will override with !important */
     justify-content: space-between !important;
     align-items: center !important;
     background: #fbfbfb !important;
@@ -16,15 +17,8 @@
     cursor: pointer !important;
 }
 
-/* Show the button when not active (radios hidden) */
-.ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle:not(.active) {
-    display: flex !important;
-}
-
-/* Hide the button when active (radios visible) */
-.ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle.active {
-    display: none !important;
-}
+/* Note: Display is controlled entirely by JavaScript inline styles */
+/* This prevents CSS from interfering with the visibility toggle */
 
 /* Update hover state selector */
 .ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle:hover {
@@ -42,8 +36,8 @@
 
 /* Strap image styling */
 .ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-image {
-    max-height: 18px !important;
-    max-width: 180px !important;
+    max-height: 25px !important;
+    max-width: 400px !important;
     width: auto !important;
     height: auto !important;
     object-fit: contain !important;
@@ -53,19 +47,19 @@
 /* Small size image */
 .ec-size.ec-size--s .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-image {
     max-height: 16px !important;
-    max-width: 100px !important;
+    max-width: 200px !important;
 }
 
 /* Large size image */
 .ec-size.ec-size--l .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-image {
-    max-height: 20px !important;
-    max-width: 140px !important;
+    max-height: 25px !important;
+    max-width: 400px !important;
 }
 
 /* Strap price styling */
 .ec-size .ec-store .details-product-option--Strap .strap-dropdown-toggle .strap-dropdown-price {
     margin-left: auto !important;
-    color: rgba(110, 110, 110, 0.8) !important;
+    color: rgba(0, 0, 0, 0.8) !important;
 }
 
 /* Default arrow size */
