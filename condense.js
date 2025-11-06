@@ -190,11 +190,15 @@ Ecwid.OnAPILoaded.add(function() {
                     contentSpan.appendChild(strapImage);
                     console.log('Image created and added for:', strapValue);
                 } else {
-                    // Fallback to text if image not found
-                    console.log('Image not found for value:', strapValue, '- falling back to text');
-                    const textNode = document.createTextNode(strapValue || 'No selection');
-                    contentSpan.appendChild(textNode);
+                    // No image found - strap name span will show the text instead
+                    console.log('Image not found for value:', strapValue);
                 }
+                
+                // Create strap name span (always shown, between image and price)
+                const strapNameSpan = document.createElement('span');
+                strapNameSpan.className = 'strap-dropdown-name';
+                strapNameSpan.textContent = strapValue || 'No selection';
+                contentSpan.appendChild(strapNameSpan);
                 
                 // Create price span
                 if (priceText) {
@@ -335,9 +339,10 @@ Ecwid.OnAPILoaded.add(function() {
                             const selectedValue = e.target.value;
                             const priceText = priceElement ? priceElement.textContent : '';
                             
-                            // Update the content span (image and price)
+                            // Update the content span (image, name, and price)
                             const contentSpan = dropdownButton.querySelector('.strap-dropdown-text');
                             const existingImage = contentSpan.querySelector('.strap-dropdown-image');
+                            const existingName = contentSpan.querySelector('.strap-dropdown-name');
                             const existingPrice = contentSpan.querySelector('.strap-dropdown-price');
                             
                             // Remove any direct text nodes (not in child elements)
@@ -365,7 +370,9 @@ Ecwid.OnAPILoaded.add(function() {
                                     strapImage.className = 'strap-dropdown-image';
                                     strapImage.src = imageUrl;
                                     strapImage.alt = selectedValue;
-                                    contentSpan.insertBefore(strapImage, existingPrice || null);
+                                    // Insert before name if it exists, otherwise before price
+                                    const insertBefore = existingName || existingPrice || null;
+                                    contentSpan.insertBefore(strapImage, insertBefore);
                                     console.log('Created new image with:', imageUrl);
                                 }
                             } else {
@@ -374,12 +381,22 @@ Ecwid.OnAPILoaded.add(function() {
                                 if (existingImage) {
                                     existingImage.style.display = 'none';
                                 }
-                                // Add text node before price if it exists, otherwise just append
-                                const textNode = document.createTextNode(selectedValue);
-                                if (existingPrice) {
-                                    contentSpan.insertBefore(textNode, existingPrice);
+                            }
+                            
+                            // Update or create strap name span
+                            if (existingName) {
+                                existingName.textContent = selectedValue;
+                            } else {
+                                const strapNameSpan = document.createElement('span');
+                                strapNameSpan.className = 'strap-dropdown-name';
+                                strapNameSpan.textContent = selectedValue;
+                                // Insert after image if it exists, otherwise before price
+                                if (existingImage && existingImage.style.display !== 'none') {
+                                    contentSpan.insertBefore(strapNameSpan, existingImage.nextSibling);
+                                } else if (existingPrice) {
+                                    contentSpan.insertBefore(strapNameSpan, existingPrice);
                                 } else {
-                                    contentSpan.appendChild(textNode);
+                                    contentSpan.appendChild(strapNameSpan);
                                 }
                             }
                             
