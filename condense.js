@@ -103,7 +103,7 @@ Ecwid.OnAPILoaded.add(function() {
         if (page.type === 'PRODUCT') {
             console.log('Page loaded, current product ID:', page.productId);
             
-            const productIds = [707439498, 707449474, 707449472, 707464855, 707464853];
+            const productIds = [707439498, 707449474, 707449472, 707464855, 707464853, 55001151, 74102380, 506210440, 94782479];
             
           // CanadaOG, CanadaTouring, CanadaRingTail, CanadaTrek, CanadaKids, UsaOG, UsaTouring, UsaRingTail, UsaTrek, UsaKids
           // const officialProductIds = [793363376, 793363171, 793364072, 793364070, 793363373, 55001151, 74102380, 506210440, 570262509, 94782479];
